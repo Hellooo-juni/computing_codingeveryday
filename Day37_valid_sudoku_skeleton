@@ -6,7 +6,7 @@ Valid Sudoku — Skeleton File
 [EN] Only write the function body (TODO sections). Do NOT modify the if __name__ == "__main__" block below!
 """
 
-
+ 
 def is_valid_sudoku(board: list[list[str]]) -> bool:
     # TODO 1: [KO] 각 행(row)에 중복된 숫자가 있는지 확인하세요. 0은 무시합니다.
     #         [EN] Check each row for duplicate numbers. Ignore 0 (empty cells).
