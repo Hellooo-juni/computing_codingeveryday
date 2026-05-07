@@ -42,21 +42,22 @@ def count_consecutive_sums(n: int) -> int:
         current = start
         while total < n:
             # TODO 4-1: total에 current를 더하세요 / add current to total
-            pass  # 여기에 작성 / write here
+            total += current # 여기에 작성 / write here
 
             # TODO 4-2: current를 1 증가시키세요 / increment current by 1
-            pass  # 여기에 작성 / write here
+            current += 1  # 여기에 작성 / write here
 
         # --------------------------------------------------------------
         # TODO 5: 누적 합이 정확히 n과 같으면 count를 1 증가시키세요
         #         If the running sum equals n exactly, increment count by 1.
         # --------------------------------------------------------------
-        # 여기에 작성 / write here
+        if total == n:
+            count += 1 
 
     # ------------------------------------------------------------------
     # TODO 6: 최종 count를 반환하세요 / Return the final count.
     # ------------------------------------------------------------------
-    return 0  # 여기를 수정 / modify here
+    return count  # 여기를 수정 / modify here
 
 
 # ====================================================================

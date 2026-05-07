@@ -16,9 +16,9 @@ def generate_secret_number(low, high):
     """
     # TODO (KO): random.randint()를 사용해서 무작위 정수를 만들고 반환하세요.
     # TODO (EN): Use random.randint() to generate a random integer and return it.
-    secret = 0
+    # random.randint(a, b)는 a 이상 b 이하의 정수를 생성합니다.
+    secret = random.randint(low, high)
     return secret
-
 
 def check_guess(guess, secret):
     """

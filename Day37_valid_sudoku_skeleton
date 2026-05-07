@@ -11,22 +11,48 @@ def is_valid_sudoku(board: list[list[str]]) -> bool:
     # TODO 1: [KO] 각 행(row)에 중복된 숫자가 있는지 확인하세요. 0은 무시합니다.
     #         [EN] Check each row for duplicate numbers. Ignore 0 (empty cells).
     #         힌트 / Hint: for row in board: ... 안에서 set을 사용
+    for row in board:
+        seen = set()
+        for num in row:
+            if num != 0:
+                if num in seen:
+                    return False  # 이미 존재하면 중복!
+                seen.add(num)
     
 
     # TODO 2: [KO] 각 열(column)에 중복된 숫자가 있는지 확인하세요. 0은 무시합니다.
     #         [EN] Check each column for duplicate numbers. Ignore 0.
     #         힌트 / Hint: 열 인덱스를 고정하고 행을 순회: board[row_index][col_index]
-    
+    for col in range(9):
+        seen = set()
+        for row in range(9):
+            num = board[row][col]
+            if num != 0:
+                if num in seen:
+                    return False
+                seen.add(num)    
 
     # TODO 3: [KO] 9개의 3x3 박스 각각에 중복된 숫자가 있는지 확인하세요. 0은 무시합니다.
     #         [EN] Check each of the nine 3x3 boxes for duplicates. Ignore 0.
     #         힌트 / Hint: 박스의 시작 좌표는 (box_row * 3, box_col * 3)
     #                     where box_row, box_col in range(3)
-    
+    # 3x3 박스는 총 9개이며, box_row와 box_col은 각각 0, 1, 2의 값을 가진다.
+    for box_row in range(3):
+        for box_col in range(3):
+            seen = set()
+            # 각 박스 내부의 3x3 칸을 순회합니다.
+            for i in range(3):
+                for j in range(3):
+                    # 전체 보드에서의 실제 좌표를 계산합니다.
+                    num = board[box_row * 3 + i][box_col * 3 + j]
+                    if num != 0:
+                        if num in seen:
+                            return False
+                        seen.add(num)
 
     # TODO 4: [KO] 모든 검사를 통과하면 True를 반환하세요.
     #         [EN] If all checks pass, return True.
-    return False  # [KO] 이 줄을 적절히 수정하세요 / [EN] Modify this line appropriately
+    return True  # [KO] 이 줄을 적절히 수정하세요 / [EN] Modify this line appropriately
 
 
 # ============================================================

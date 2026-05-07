@@ -11,28 +11,31 @@ def find_max_average(nums: list[int], k: int) -> float:
     # KO: TODO 1 — 첫 번째 윈도우의 합을 계산하세요 (인덱스 0부터 k-1까지).
     # EN: TODO 1 — Compute the sum of the first window (indices 0 to k-1).
     # 힌트 / Hint: sum()과 슬라이싱을 활용하세요. / Use sum() with slicing.
-    window_sum = 0
+    window_sum = sum(nums[:k])
 
     # KO: TODO 2 — 지금까지 본 최댓값을 추적할 변수를 초기화하세요.
     # EN: TODO 2 — Initialize a variable to track the maximum sum seen so far.
     # 주의 / Caution: 0으로 시작하면 음수 입력에서 틀립니다!
     #                 Starting at 0 fails on all-negative inputs!
-    max_sum = 0
+    # 첫 번째 구간의 합을 초기 최댓값으로 설정합니다.
+    max_sum = window_sum
 
     # KO: TODO 3 — 윈도우를 한 칸씩 오른쪽으로 옮기며 합을 갱신하세요.
     # EN: TODO 3 — Slide the window one step right, updating the sum each time.
     # 힌트 / Hint: 들어오는 값(nums[i])을 더하고, 나가는 값(nums[i - k])을 빼세요.
     #              Add the entering value (nums[i]) and subtract the leaving one (nums[i - k]).
     for i in range(k, len(nums)):
-        # KO: 윈도우 합 갱신 / EN: Update the window sum
-        pass
+        # KO: 윈도우 합 갱신 
+        # 새롭게 들어온 nums[i]를 더하고, 윈도우 밖으로 나가는 nums[i-k]를 뺍니다.
+        window_sum += nums[i] - nums[i - k]
 
-        # KO: 최댓값 갱신 / EN: Update the maximum
-        pass
+        # KO: 최댓값 갱신
+        if window_sum > max_sum:
+            max_sum = window_sum
 
     # KO: TODO 4 — 합이 아닌 "평균"을 반환해야 합니다. k로 나누세요.
     # EN: TODO 4 — Return the "average," not the sum. Divide by k.
-    return 0.0
+    return max_sum / k
 
 
 if __name__ == "__main__":

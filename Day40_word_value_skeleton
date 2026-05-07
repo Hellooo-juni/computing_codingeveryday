@@ -30,11 +30,15 @@ def get_letter_value(letter: str) -> int:
     # TODO (KO): A=1, B=2, ..., Z=26 매핑을 dictionary로 만드세요.
     # TODO (EN): Build a dictionary mapping A=1, B=2, ..., Z=26.
     #   힌트 / Hint: string.ascii_uppercase + enumerate(..., 1)
-    letter_value = {}
+    # string.ascii_uppercase는 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 문자열입니다.
+    # enumerate(..., 1)을 사용하여 1부터 시작하는 인덱스를 짝지어줍니다.
+    letter_value = {char: i for i, char in enumerate(string.ascii_uppercase, 1)}
 
     # TODO (KO): 입력받은 letter를 대문자로 바꾸고, dictionary에서 값을 꺼내세요.
     # TODO (EN): Convert the input letter to uppercase, then look it up in the dictionary.
-    result = 0
+    # 입력값이 소문자일 수 있으므로 .upper()를 사용합니다.
+    upper_letter = letter.upper()
+    result = letter_value.get(upper_letter, 0) # 알파벳이 아니면 0을 반환
 
     return result
 
@@ -63,6 +67,10 @@ def calculate_word_value(word: str) -> int:
     # TODO (EN): Loop through each character in word; if it's a letter, add its value.
     #   힌트 / Hint: char.isalpha() 로 알파벳인지 확인 / use char.isalpha() to check
     #   힌트 / Hint: get_letter_value(char) 를 재사용하세요 / reuse get_letter_value(char)
+    for char in word:
+        if char.isalpha():  # 알파벳인지 확인 (공백, 숫자 무시)
+            # 위에서 만든 get_letter_value 함수를 재사용합니다.
+            total += get_letter_value(char)
 
     return total
 
@@ -89,6 +97,9 @@ def find_words_with_value(words: list[str], target_value: int) -> list[str]:
     #            target_value와 같으면 result에 append 하세요.
     # TODO (EN): For each word in words, call calculate_word_value;
     #            if it equals target_value, append it to result.
+    for word in words:
+        if calculate_word_value(word) == target_value:
+            result.append(word)
 
     return result
 
@@ -127,4 +138,5 @@ if __name__ == "__main__":
     print(f"  예상/expected: ['attitude', 'discipline']")
     print(f"target=96  -> {find_words_with_value(words, 96)}")
     print(f"  예상/expected: ['knowledge']")
-    print(f"target=999 -> {find_words_with_value(words, 999)
+    print(f"target=999 -> {find_words_with_value(words, 999)}")
+    print(f"  예상/expected: []")

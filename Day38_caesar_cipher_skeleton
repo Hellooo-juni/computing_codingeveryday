@@ -24,31 +24,35 @@ def caesar_encode(message: str, key: int) -> str:
         # TODO 3: char가 소문자인지 확인하세요 (a-z)
         # TODO 3 (EN): Check if char is lowercase (a-z)
         # 힌트 / Hint: "a" <= char <= "z"
-        if ____:
+        if "a" <= char <= "z":
             # TODO 4: 소문자를 key만큼 밀어서 변환하세요
             # TODO 4 (EN): Shift the lowercase letter by `key` positions
             # 공식 / Formula: chr((ord(char) - ord("a") + key) % 26 + ord("a"))
-            shifted_char = ____
+            # ord(char) - ord("a"): 글자를 0~25 사이 숫자로 변환
+            # + key: 키만큼 이동
+            # % 26: 26을 넘어가면 다시 0부터 시작하도록 처리
+            # + ord("a"): 다시 아스키(ASCII) 코드 값으로 복구
+            shifted_char = chr((ord(char) - ord("a") + key) % 26 + ord("a"))
             result = result + shifted_char
 
         # TODO 5: char가 대문자인지 확인하세요 (A-Z)
         # TODO 5 (EN): Check if char is uppercase (A-Z)
-        elif ____:
+        elif "A" <= char <= "Z":
             # TODO 6: 대문자를 key만큼 밀어서 변환하세요
             # TODO 6 (EN): Shift the uppercase letter by `key` positions
             # 힌트 / Hint: 위 공식에서 "a"를 "A"로 바꾸세요
             #              In the formula above, replace "a" with "A"
-            shifted_char = ____
+            shifted_char = chr((ord(char) - ord("A") + key) % 26 + ord("A"))
             result = result + shifted_char
 
         # TODO 7: 영문자가 아니면 그대로 추가하세요 (숫자, 공백, 특수문자)
         # TODO 7 (EN): If not a letter, add as-is (digits, spaces, special chars)
         else:
-            result = ____
+            result = result + char
 
     # TODO 8: 최종 결과를 반환하세요
     # TODO 8 (EN): Return the final result
-    return ____
+    return result
 
 
 # ============================================================
