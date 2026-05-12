@@ -10,7 +10,7 @@
 # KO: time 모듈을 import 하세요
 # EN: Import the time module
 # (여기에 import 문 작성 / Write your import statement here)
-
+import time
 
 def sum_with_loop(numbers):
     """
@@ -25,7 +25,8 @@ def sum_with_loop(numbers):
     # TODO 3:
     # KO: for 루프로 numbers의 각 원소를 total에 더한다
     # EN: Use a for loop to add each element of numbers to total
-
+    for n in numbers:
+        total += n
 
     # TODO 4:
     # KO: total을 반환
@@ -41,7 +42,7 @@ def sum_with_builtin(numbers):
     # TODO 5:
     # KO: sum() 내장 함수를 호출하고 그 결과를 반환 (한 줄!)
     # EN: Call the built-in sum() and return the result (one line!)
-    pass
+    return sum(numbers)
 
 
 def measure_function_time(func, numbers):
@@ -55,22 +56,22 @@ def measure_function_time(func, numbers):
     # TODO 6:
     # KO: 시작 시각을 start_time에 저장 (time.time() 사용)
     # EN: Save the start time to start_time (use time.time())
-    start_time = 0.0
+    start_time = time.time()
 
     # TODO 7:
     # KO: func(numbers)를 호출하고 결과를 result에 저장
     # EN: Call func(numbers) and save the result in `result`
-    result = None
+    result = func(numbers)
 
     # TODO 8:
     # KO: 종료 시각을 end_time에 저장
     # EN: Save the end time to end_time
-    end_time = 0.0
+    end_time = time.time()
 
     # TODO 9:
     # KO: 경과 시간 elapsed = end_time - start_time
     # EN: Calculate elapsed = end_time - start_time
-    elapsed = 0.0
+    elapsed = end_time - start_time
 
     # TODO 10:
     # KO: (result, elapsed)를 튜플로 반환
@@ -92,34 +93,37 @@ def run_speed_lab():
     # TODO 12:
     # KO: 5,000,000개의 숫자 리스트 생성 — list(range(5_000_000))
     # EN: Create a list of 5,000,000 numbers — list(range(5_000_000))
-    numbers = []
+    numbers = list(range(5_000_000))
 
     # TODO 13:
     # KO: measure_function_time을 사용해서 sum_with_loop 측정
     #     주의: sum_with_loop 뒤에 ()를 붙이지 마세요! 함수 자체를 전달해야 함
     # EN: Use measure_function_time to measure sum_with_loop
     #     Note: do NOT add () after sum_with_loop! Pass the function itself
-    loop_result = 0
-    loop_time = 0.0
+    loop_result, loop_time = measure_function_time(sum_with_loop, numbers)
+    
 
     # TODO 14:
     # KO: sum_with_loop 결과 출력 (시간은 :.4f 형식)
     # EN: Print sum_with_loop results (time with :.4f format)
     print()
     print("[방법 1 / Method 1] for 루프 / for-loop")
+    print(f"- 결과 / Result: {loop_result}")
+    print(f"- 시간 / Time: {loop_time:.4f}s")
 
 
     # TODO 15:
     # KO: measure_function_time을 사용해서 sum_with_builtin 측정
     # EN: Use measure_function_time to measure sum_with_builtin
-    builtin_result = 0
-    builtin_time = 0.0
+    builtin_result, builtin_time = measure_function_time(sum_with_builtin, numbers)
 
     # TODO 16:
     # KO: sum_with_builtin 결과 출력
     # EN: Print sum_with_builtin results
     print()
     print("[방법 2 / Method 2] sum() 내장 / sum() built-in")
+    print(f"- 결과 / Result: {builtin_result}")
+    print(f"- 시간 / Time: {builtin_time:.4f}s")
 
 
     # TODO 17:
@@ -130,7 +134,11 @@ def run_speed_lab():
     #     If equal: print "✅ Both results match!"
     #     If different: print "❌ Results differ!" and return
     print()
-
+    if loop_result == builtin_result:
+        print("✅ 두 결과가 같음을 확인! / Both results match!")
+    else:
+        print("❌ 결과가 다름! / Results differ!")
+        return
 
     # TODO 18:
     # KO: 어느 쪽이 더 빠른지 판단해서 우승자 출력
@@ -140,7 +148,12 @@ def run_speed_lab():
     #     Calculate ratio: ratio = (slower_time) / (faster_time)
     #     e.g., "🏆 Winner: sum() built-in (4.4x faster)"
     print()
-
+    if loop_time > builtin_time:
+        ratio = loop_time / builtin_time
+        print(f"🏆 우승: sum() 내장 함수 ({ratio:.1f}배 빠름)")
+    else:
+        ratio = builtin_time / loop_time
+        print(f"🏆 우승: for 루프 ({ratio:.1f}배 빠름)")
 
 
 if __name__ == "__main__":

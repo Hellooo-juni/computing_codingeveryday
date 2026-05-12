@@ -26,18 +26,19 @@ def generate_lotto_numbers():
     # KO: 6개를 뽑을 때까지 반복하세요. (while 루프 사용)
     # EN: Repeat until you've drawn 6 numbers. (use a while loop)
     # TODO: while 조건을 작성하세요 / write the while condition
-
+    while len(numbers) < 6:
     # KO: random.randint(1, 45)로 숫자 하나를 뽑으세요.
     # EN: Draw one number with random.randint(1, 45).
-    # TODO
+        new_num = random.randint(1, 45)
 
     # KO: 이미 뽑은 숫자가 아니면 리스트에 추가하세요.
     # EN: If the number is not already in the list, append it.
-    # TODO
+        if new_num not in numbers:
+            numbers.append(new_num)
 
     # KO: 리스트를 오름차순으로 정렬하세요.
     # EN: Sort the list in ascending order.
-    # TODO
+    numbers.sort()
 
     # KO: 정렬된 리스트를 반환하세요.
     # EN: Return the sorted list.
@@ -54,13 +55,16 @@ def generate_lotto_with_bonus():
     """
     # KO: 본 번호 6개를 뽑으세요. (과제 1과 같은 방식, 또는 그 함수를 재사용해도 OK)
     # EN: Draw 6 main numbers. (same approach as Task 1, or reuse that function)
-    main_numbers = []
-    # TODO
+    main_numbers = generate_lotto_numbers()
+    
 
     # KO: 보너스 번호를 뽑되, 본 번호와 겹치면 다시 뽑으세요.
     # EN: Draw a bonus number; if it collides with main numbers, draw again.
-    bonus = 0
-    # TODO
+    while True:
+        bonus = random.randint(1, 45)
+        # 본 번호 리스트에 없는 번호가 뽑혔을 때만 루프 탈출
+        if bonus not in main_numbers:
+            break
 
     # KO: 본 번호와 보너스를 함께 반환하세요. (튜플로 두 값 반환)
     # EN: Return main numbers and bonus together. (return two values as a tuple)
@@ -81,7 +85,9 @@ def generate_multiple_games(num_games=5):
 
     # KO: num_games 만큼 반복하면서 generate_lotto_numbers()를 호출해 추가하세요.
     # EN: Loop num_games times, calling generate_lotto_numbers() and appending each result.
-    # TODO
+    for _ in range(num_games):
+        game = generate_lotto_numbers()
+        games.append(game)
 
     # KO: 모든 게임이 담긴 리스트를 반환하세요.
     # EN: Return the list of all games.

@@ -25,15 +25,15 @@ def days_until(target_date: date) -> int:
     """
     # TODO 1-1: date.today() 로 오늘 날짜 가져오기
     # TODO 1-1: Get today's date using date.today()
-
+    today = date.today()
 
     # TODO 1-2: target_date 에서 today 를 빼서 timedelta 객체 만들기
     # TODO 1-2: Subtract today from target_date to get a timedelta object
-
+    diff = target_date - today
 
     # TODO 1-3: timedelta 의 .days 속성을 정수로 반환
     # TODO 1-3: Return the .days attribute as an integer
-    pass
+    return diff.days
 
 
 # ============================================================
@@ -50,15 +50,15 @@ def format_deadline(target_date: date) -> str:
     # TODO 2-1: 요일 이름 리스트 만들기 (월요일=0, 일요일=6 순서)
     # TODO 2-1: Build a weekday-name list (Monday=0, Sunday=6 order)
     # 힌트 / Hint: ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
-
+    weekdays = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
 
     # TODO 2-2: target_date.weekday() 로 요일 인덱스 가져와서 한글 이름 찾기
     # TODO 2-2: Use target_date.weekday() to look up the Korean weekday name
-
+    day_name = weekdays[target_date.weekday()]
 
     # TODO 2-3: f-string 으로 "YYYY년 MM월 DD일 (요일)" 형식의 문자열 만들어서 반환
     # TODO 2-3: Build and return the "YYYY년 MM월 DD일 (요일)" formatted string
-    pass
+    return f"{target_date.year}년 {target_date.month}월 {target_date.day}일 ({day_name})"
 
 
 # ============================================================
@@ -78,17 +78,27 @@ def deadline_status(target_date: date) -> tuple:
     """
     # TODO 3-1: days_until() 함수를 호출해서 남은 일수 계산
     # TODO 3-1: Call days_until() to compute days remaining
-
+    days_left = days_until(target_date)
 
     # TODO 3-2: if/elif/else 로 상태 메시지 결정
     # TODO 3-2: Use if/elif/else to decide the status message
     # 주의 / Note: 음수일 때는 "지남 (N일 전)" — 절댓값 사용 (abs())
     # When negative, use "지남 (N일 전)" — apply abs() for the number
-
+    if days_left < 0:
+        # 음수일 경우 abs() 함수를 사용하여 양수로 바꾼 뒤 몇 일 전인지 표시합니다.
+        status_message = f"지남 ({abs(days_left)}일 전)"
+    elif days_left == 0:
+        status_message = "오늘 마감!"
+    elif 1 <= days_left <= 3:
+        status_message = "임박"
+    elif 4 <= days_left <= 7:
+        status_message = "곧"
+    else: # 8 이상
+        status_message = "여유"
 
     # TODO 3-3: (남은 일수, 상태 메시지) 튜플 반환
     # TODO 3-3: Return the (days_left, status_message) tuple
-    pass
+    return (days_left, status_message)
 
 
 # ============================================================

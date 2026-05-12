@@ -8,7 +8,7 @@ Student skeleton file. Follow the TODO comments to complete the function.
 
 # TODO 1: math 모듈을 import 하세요.
 # TODO 1: Import the math module.
-
+import math
 
 def calculate_arrow_score(x: float, y: float) -> int:
     """
@@ -22,15 +22,18 @@ def calculate_arrow_score(x: float, y: float) -> int:
     #         거리 공식: √(x² + y²)
     # TODO 2: Use math.sqrt to compute distance from (0, 0).
     #         Distance formula: √(x² + y²)
-    distance = 0  # ← 이 줄을 수정하세요 / modify this line
+    distance = math.sqrt(x**2 + y**2)
 
     # TODO 3: 거리가 50을 초과하면 0을 반환하세요. (과녁 벗어남)
     # TODO 3: If distance exceeds 50, return 0. (missed the target)
-    pass  # ← 이 줄을 수정하세요 / modify this line
+    if distance > 50:
+        return 0
 
     # TODO 4: math.floor를 사용해 (10 - distance / 5) 의 내림값을 반환하세요.
     # TODO 4: Use math.floor to return the floor of (10 - distance / 5).
-    return 0  # ← 이 줄을 수정하세요 / modify this line
+    score = math.floor(10 - distance / 5)
+    # 계산된 점수가 0보다 작아지는 경우를 대비해 최종 확인 (선택 사항이지만 안전함)
+    return score if score > 0 else 0
 
 
 # ===== 테스트 블록 (수정 금지) / Test block (do not modify) =====
