@@ -18,9 +18,10 @@ def dict_to_json_string(book: dict) -> str:
     """
     # TODO 1-1: json 모듈의 dumps() 함수를 사용하여 book을 JSON 문자열로 변환하세요.
     # TODO 1-1: Use json.dumps() to convert book into a JSON string.
+    json_str = json.dumps(book)
     # TODO 1-2: 변환된 문자열을 return 하세요.
     # TODO 1-2: Return the converted string.
-    pass
+    return json_str
 
 
 # ============================================================
@@ -33,9 +34,10 @@ def json_string_to_dict(json_text: str) -> dict:
     """
     # TODO 2-1: json 모듈의 loads() 함수를 사용하여 json_text를 딕셔너리로 변환하세요.
     # TODO 2-1: Use json.loads() to convert json_text into a dictionary.
+    book_dict = json.loads(json_text)
     # TODO 2-2: 변환된 딕셔너리를 return 하세요.
     # TODO 2-2: Return the converted dictionary.
-    pass
+    return book_dict
 
 
 # ============================================================
@@ -48,17 +50,21 @@ def count_available_books(catalog_json: str) -> int:
     """
     # TODO 3-1: json.loads()를 사용하여 catalog_json을 리스트로 변환하세요.
     # TODO 3-1: Use json.loads() to convert catalog_json into a list.
+    catalog = json.loads(catalog_json)
 
     # TODO 3-2: 카운터 변수를 0으로 초기화하세요.
     # TODO 3-2: Initialize a counter variable to 0.
+    count = 0
 
     # TODO 3-3: 리스트의 각 책(딕셔너리)을 순회하면서, "available" 키의 값이 True이면 카운터를 1 증가시키세요.
     # TODO 3-3: Loop through each book in the list. If its "available" value is True, increment the counter.
+    for book in catalog:
+        if book.get("available") == True:
+            count += 1
 
     # TODO 3-4: 카운터를 return 하세요.
     # TODO 3-4: Return the counter.
-    pass
-
+    return count
 
 # ============================================================
 # 과제 4 / Task 4: add_new_book
@@ -70,13 +76,15 @@ def add_new_book(catalog_json: str, new_book: dict) -> str:
     """
     # TODO 4-1: json.loads()를 사용하여 catalog_json을 리스트로 변환하세요.
     # TODO 4-1: Use json.loads() to convert catalog_json into a list.
+    catalog_list = json.loads(catalog_json)
 
     # TODO 4-2: 리스트의 append() 메서드를 사용하여 new_book을 리스트에 추가하세요.
     # TODO 4-2: Use the list's append() method to add new_book to the list.
+    catalog_list.append(new_book)
 
     # TODO 4-3: json.dumps()를 사용하여 리스트를 다시 JSON 문자열로 변환하고 return 하세요.
     # TODO 4-3: Use json.dumps() to convert the list back into a JSON string and return it.
-    pass
+    return json.dumps(catalog_list)
 
 
 # ============================================================
@@ -89,16 +97,21 @@ def find_books_by_author(catalog_json: str, author_name: str) -> list:
     """
     # TODO 5-1: json.loads()를 사용하여 catalog_json을 리스트로 변환하세요.
     # TODO 5-1: Use json.loads() to convert catalog_json into a list.
+    catalog = json.loads(catalog_json)
 
     # TODO 5-2: 빈 리스트를 만들어 결과를 담을 준비를 하세요.
     # TODO 5-2: Create an empty list to hold the results.
+    titles = []
 
     # TODO 5-3: 카탈로그를 순회하면서, "author"가 author_name과 같으면 그 책의 "title"을 결과 리스트에 추가하세요.
     # TODO 5-3: Loop through the catalog. If "author" matches author_name, append the book's "title" to the result list.
+    for book in catalog:
+        if book.get("author") == author_name:
+            titles.append(book.get("title"))
 
     # TODO 5-4: 결과 리스트를 return 하세요.
     # TODO 5-4: Return the result list.
-    pass
+    return titles
 
 
 # ============================================================
@@ -109,17 +122,34 @@ def find_books_by_author(catalog_json: str, author_name: str) -> list:
 # 책 딕셔너리를 들여쓰기가 적용된 JSON 문자열로 변환하세요.
 # Convert a book dictionary into a JSON string with indentation.
 # 힌트 / Hint: json.dumps(book, indent=2)
+def pretty_print_book(book: dict) -> str:
+    # indent 옵션을 주면 읽기 편한 형태로 변환됩니다.
+    return json.dumps(book, indent=2)
 
 
 # 🥈 Medium: get_oldest_book(catalog_json)
 # 카탈로그에서 가장 오래된(year가 가장 작은) 책의 제목을 반환하세요.
 # Return the title of the oldest book in the catalog (smallest year value).
+def get_oldest_book(catalog_json: str) -> str:
+    catalog = json.loads(catalog_json)
+    if not catalog: return None
+    # min 함수와 key를 사용하여 year가 가장 작은 딕셔너리를 찾습니다.
+    oldest = min(catalog, key=lambda x: x['year'])
+    return oldest['title']
 
 
 # 🥇 Hard: catalog_summary(catalog_json)
 # 저자별 책 권수를 담은 딕셔너리를 반환하세요.
 # Return a dictionary mapping each author to their book count.
 # 예 / Example: {"George Orwell": 2, "Frank Herbert": 1}
+def catalog_summary(catalog_json: str) -> dict:
+    catalog = json.loads(catalog_json)
+    summary = {}
+    for book in catalog:
+        author = book['author']
+        # dict.get(key, default)를 사용해 카운팅을 구현합니다.
+        summary[author] = summary.get(author, 0) + 1
+    return summary
 
 
 # ============================================================

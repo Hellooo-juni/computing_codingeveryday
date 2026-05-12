@@ -33,18 +33,26 @@ def read_grades(file_path: str) -> list:
     # TODO 2: with 문을 사용해 파일을 "r" 모드, encoding="utf-8"로 여세요.
     # TODO 2: Open the file in "r" mode with encoding="utf-8" using the with statement.
     # 힌트 / Hint:  with open(...) as f:
+    with open(file_path, "r", encoding="utf-8") as f:
 
     # TODO 3: 파일에서 한 줄씩 반복해서 읽으세요.
     # TODO 3: Iterate through the file line by line.
+        for line in f:
 
     # TODO 4: 각 줄에서 strip()으로 줄바꿈 문자(\n)를 제거하세요.
     # TODO 4: Use strip() to remove the newline character (\n) from each line.
+            clean_line = line.strip()
+            # 빈 줄인 경우 건너뜁니다.
+            if not clean_line:
+                continue
 
     # TODO 5: split(",")로 이름과 점수를 분리하세요.
     # TODO 5: Use split(",") to separate the name and score.
+            name, score_str = clean_line.split(",")
 
     # TODO 6: 점수를 int()로 정수로 변환한 뒤, (이름, 점수) 튜플로 grades에 추가하세요.
     # TODO 6: Convert the score to an integer with int(), then append (name, score) as a tuple.
+            grades.append((name, int(score_str)))
 
     return grades
 
@@ -74,22 +82,38 @@ def write_summary(file_path: str, grades: list) -> None:
     # 힌트 / Hint: 첫 번째 학생을 기준으로 시작하면 편합니다.
     # Hint: It's easier to start with the first student as the baseline.
     highest_name = ""
-    highest_score = -1
+    highest_score = -1 # 가능한 최저 점수보다 낮은 값으로 설정
     lowest_name = ""
-    lowest_score = 101
+    lowest_score = 101 # 가능한 최고 점수보다 높은 값으로 설정
 
     # TODO 9: grades 리스트를 반복하며 합계, 최고점, 최저점을 갱신하세요.
     # TODO 9: Loop through grades and update total, highest, and lowest.
+    for name, score in grades:
+        total += score
+        count += 1
+        
+        # 최고점 체크
+        if score > highest_score:
+            highest_score = score
+            highest_name = name
+            
+        # 최저점 체크
+        if score < lowest_score:
+            lowest_score = score
+            lowest_name = name
 
     # TODO 10: 평균을 계산하세요. (소수점이 나올 수 있도록 / division)
     # TODO 10: Calculate the average. (Use division to allow decimals.)
-    average = 0.0
+    if count > 0:
+        average = total / count
+    else:
+        average = 0.0
 
     # TODO 11: with 문으로 파일을 "w" 모드, encoding="utf-8"로 여세요.
     # TODO 11: Open the file in "w" mode with encoding="utf-8" using the with statement.
-
-    # TODO 12: 다음 5줄을 파일에 쓰세요. 각 줄 끝에 \n을 잊지 마세요!
-    # TODO 12: Write the following 5 lines to the file. Don't forget \n at the end of each!
+    with open(file_path, "w", encoding="utf-8") as f:
+        # TODO 12: 다음 5줄을 파일에 쓰세요. 각 줄 끝에 \n을 잊지 마세요!
+        # TODO 12: Write the following 5 lines to the file. Don't forget \n at the end of each!
     #   === Grade Summary ===
     #   Total students: <count>
     #   Average score: <average to 2 decimal places>
@@ -98,7 +122,14 @@ def write_summary(file_path: str, grades: list) -> None:
     #
     # 힌트 / Hint: f"{average:.2f}" 형식을 사용하세요.
     # Hint: Use f"{average:.2f}" formatting.
+        f.write("=== Grade Summary ===\n")
+        f.write(f"Total students: {count}\n")
+        f.write(f"Average score: {average:.2f}\n")
+        f.write(f"Highest: {highest_name} ({highest_score})\n")
+        f.write(f"Lowest: {lowest_name} ({lowest_score})\n")
 
+    
+   
 
 # ============================================================
 # 🎪 테스트 코드 (수정하지 마세요!) / Test Code (Do not modify!)
@@ -155,7 +186,9 @@ def add_diary_entry(file_path: str, entry: str) -> None:
     Append a new entry to the end of the diary file.
     힌트 / Hint: "a" 모드를 사용하세요. / Use "a" mode.
     """
-    pass
+    # "a" 모드는 'Append'의 약자로, 파일 끝에 내용을 추가합니다.
+    with open(file_path, "a", encoding="utf-8") as f:
+        f.write(entry + "\n")
 
 
 # 🥈 Medium: CSV 형식 (헤더 처리) / CSV Format (with header)
@@ -172,7 +205,16 @@ def process_grades_csv(input_path: str, output_path: str) -> None:
     힌트 / Hint: 첫 줄은 readline()으로 건너뛰세요. 70점 이상이면 PASS.
     Hint: Skip the first line with readline(). PASS if score >= 70.
     """
-    pass
+    with open(input_path, "r", encoding="utf-8") as fin:
+        header = fin.readline() # 첫 번째 줄(헤더)을 읽어서 건너뜁니다.
+        
+        with open(output_path, "w", encoding="utf-8") as fout:
+            fout.write("name,score,status\n") # 새로운 헤더 작성
+            for line in fin:
+                name, score_str = line.strip().split(",")
+                score = int(score_str)
+                status = "PASS" if score >= 70 else "FAIL"
+                fout.write(f"{name},{score},{status}\n")
 
 
 # 🥇 Hard: 예외 처리 미리보기 / Exception handling preview
@@ -188,4 +230,8 @@ def safe_read_grades(file_path: str) -> list:
             print(...)
             return []
     """
-    pass
+    try:
+        return read_grades(file_path)
+    except FileNotFoundError:
+        print(f"오류: {file_path} 파일을 찾을 수 없습니다.")
+        return []
