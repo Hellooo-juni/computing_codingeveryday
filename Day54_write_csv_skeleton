@@ -50,11 +50,15 @@ def save_ratings(ratings, file_path):
     """
     # TODO: Open the file in "w" mode with utf-8 encoding
     # TODO: "w" 모드, utf-8 인코딩으로 파일 열기
+    with open(file_path, "w", encoding="utf-8") as f:
 
     # TODO: Write the header / 헤더 작성
-
+        f.write("title,genre,year,rating\n")
     # TODO: Loop and write each row / 각 행을 반복하면서 작성
-    pass
+        for movie in ratings:
+            # f-string을 사용하여 데이터를 쉼표로 구분하고 끝에 줄바꿈 추가
+            line = f"{movie[0]},{movie[1]},{movie[2]},{movie[3]}\n"
+            f.write(line)
 
 
 def save_filtered_by_genre(ratings, genre, file_path):
@@ -66,11 +70,16 @@ def save_filtered_by_genre(ratings, genre, file_path):
                 먼저 필터링된 리스트를 만든 후 save_ratings()를 호출하세요.
     """
     # TODO: Build a filtered list / 필터링된 리스트 만들기
+    filtered_list = []
+    for movie in ratings:
+        if movie[1] == genre:
+            filtered_list.append(movie)
 
     # TODO: Save it using save_ratings() / save_ratings()로 저장
+    save_ratings(filtered_list, file_path)
 
     # TODO: Return the count / 개수 반환
-    pass
+    return len(filtered_list)
 
 
 def save_top_n(ratings, n, file_path):
@@ -94,15 +103,28 @@ def save_top_n(ratings, n, file_path):
         5. Return how many were saved (could be less than n if list is small)
            실제 저장된 개수 반환 (리스트가 작으면 n보다 적을 수 있음)
     """
-    # TODO: Make a copy of ratings / ratings의 복사본 만들기
+    # TODO: Make a copy of ratings / ratings의 복사본 (원본 보존)
+    temp_list = ratings[:] # 슬라이싱을 이용한 얕은 복사
+    sorted_list = []
 
-    # TODO: Build a sorted list (descending by rating)
+    # TODO: Build a sorted list (descending by rating) (선택 정렬 스타일)
     # TODO: 정렬된 리스트 만들기 (평점 내림차순)
+    while temp_list:
+        max_idx = 0
+        for i in range(1, len(temp_list)):
+            # 현재까지의 최대값보다 큰 평점을 찾으면 인덱스 갱신
+            if temp_list[i][3] > temp_list[max_idx][3]:
+                max_idx = i
+
+        # 가장 높은 영화를 꺼내서 결과 리스트에 추가
+        sorted_list.append(temp_list.pop(max_idx))
 
     # TODO: Take the top n / 상위 n개 선택
+    top_n_list = sorted_list[:n]
 
     # TODO: Save and return count / 저장하고 개수 반환
-    pass
+    save_ratings(top_n_list, file_path)
+    return len(top_n_list)
 
 
 def save_summary_report(ratings, file_path):
@@ -146,16 +168,43 @@ def save_summary_report(ratings, file_path):
                     if genres[i] == current_genre:
                         ...
     """
-    # TODO: Initialize three parallel lists / 평행 리스트 3개 초기화
+    # TODO: Initialize three parallel lists / 평행 리스트 3개 초기화 (딕셔너리 사용 금지)
+    genres = []  # 장르 이름 리스트
+    counts = []  # 각 장르별 영화 수
+    totals = []  # 각 장르별 평점 합계
 
     # TODO: Loop through ratings and update the lists
     # TODO: ratings를 반복하면서 리스트 갱신
+    for movie in ratings:
+        curr_genre = movie[1]
+        curr_rating = movie[3]
+
+        # 이미 목록에 있는 장르인지 확인
+        found_idx = -1
+        for i in range(len(genres)):
+            if genres[i] == curr_genre:
+                found_idx = i
+                break
+
+        if found_idx != -1:
+            # 이미 있는 장르라면 데이터 누적
+            counts[found_idx] += 1
+            totals[found_idx] += curr_rating
+        else:
+            # 처음 보는 장르라면 리스트에 추가
+            genres.append(curr_genre)
+            counts.append(1)
+            totals.append(curr_rating)
 
     # TODO: Write the summary file / 요약 파일 작성
+    with open(file_path, "w", encoding="utf-8") as f:
+        f.write("genre,count,average_rating\n")
+        for i in range(len(genres)):
+            avg = totals[i] / counts[i]
+            f.write(f"{genres[i]},{counts[i]},{avg:.2f}\n")
 
     # TODO: Return number of genres / 장르 개수 반환
-    pass
-
+    return len(genres)
 
 def load_ratings_safe(file_path):
     """
@@ -169,10 +218,13 @@ def load_ratings_safe(file_path):
     """
     # TODO: Wrap load_ratings() in try/except
     # TODO: load_ratings()를 try/except로 감싸기
+    try:
+        return load_ratings(file_path)
 
     # TODO: On FileNotFoundError, return []
     # TODO: FileNotFoundError 발생 시 [] 반환
-    pass
+    except FileNotFoundError:
+        return []
 
 
 # ============================================================

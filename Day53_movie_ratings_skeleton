@@ -32,9 +32,25 @@ def load_ratings(file_path):
     ratings = []
     # TODO: Open the file and read its contents
     # TODO: 파일을 열고 내용을 읽으세요
+    with open(file_path, "r", encoding="utf-8") as f:
+        lines = f.readlines()
 
     # TODO: Loop through lines, skip the header, parse each row
     # TODO: 줄들을 반복하면서, 헤더를 건너뛰고, 각 행을 파싱하세요
+    # enumerate를 사용해 인덱스 0인 헤더를 건너뜁니다.
+    for i, line in enumerate(lines):
+        if i == 0:  # Skip the header
+            continue
+# 공백 제거 및 쉼표 기준 분리
+        parts = line.strip().split(",")
+        
+        if len(parts) == 4:
+            title = parts[0]
+            genre = parts[1]
+            year = int(parts[2])    # 연도는 정수형으로 변환
+            rating = float(parts[3]) # 평점은 실수형으로 변환
+            
+            ratings.append([title, genre, year, rating])
 
     return ratings
 
@@ -45,7 +61,9 @@ def count_movies(ratings):
     영화의 총 개수를 반환합니다. (여기서는 len() 사용 가능)
     """
     # TODO: Return the count / 개수를 반환하세요
-    pass
+    if ratings is None:
+        return 0
+    return len(ratings)
 
 
 def average_rating(ratings):
@@ -59,11 +77,16 @@ def average_rating(ratings):
                 Do NOT use sum(). / sum()을 사용하지 마세요.
     """
     # TODO: Handle empty list / 빈 리스트 처리
+    if not ratings:
+        return 0.0
 
     # TODO: Loop and accumulate / 반복하면서 누적
+    total_sum = 0.0  # 합계를 담을 변수를 먼저 0으로 만들어줍니다.
+    for movie in ratings:
+        total_sum += movie[3]  # 각 영화의 평점(인덱스 3)을 더해줍니다.
 
     # TODO: Return average / 평균 반환
-    pass
+    return total_sum / len(ratings)
 
 
 def highest_rated(ratings):
@@ -77,13 +100,23 @@ def highest_rated(ratings):
                 Do NOT use max(). / max()를 사용하지 마세요.
     """
     # TODO: Handle empty list / 빈 리스트 처리
+    if not ratings:
+        return None
 
-    # TODO: Initialize best title and best score / 최고 제목과 최고 점수 초기화
+    # TODO: Initialize best title and best score / 최고 제목과 최고 점수 초기화(max() 사용 금지)
+    # 첫 번째 영화를 기준으로 초기화
+    best_title = ratings[0][0]
+    highest_score = ratings[0][3]
 
     # TODO: Loop and update / 반복하면서 갱신
+    for movie in ratings:
+        current_score = movie[3]
+        if current_score > highest_score:
+            highest_score = current_score
+            best_title = movie[0]
 
     # TODO: Return the best title / 최고 제목 반환
-    pass
+    return best_title
 
 
 def filter_by_genre(ratings, genre):
@@ -93,7 +126,11 @@ def filter_by_genre(ratings, genre):
     """
     # TODO: Build a new list with matching rows
     # TODO: 일치하는 행들로 새 리스트 만들기
-    pass
+    filtered_list = []
+    for movie in ratings:
+        if movie[1] == genre: # genre는 리스트의 2번째(인덱스 1) 요소
+            filtered_list.append(movie)
+    return filtered_list
 
 
 def count_above_threshold(ratings, threshold):
@@ -103,7 +140,11 @@ def count_above_threshold(ratings, threshold):
     """
     # TODO: Count rows where rating >= threshold
     # TODO: rating >= threshold인 행의 개수 세기
-    pass
+    count = 0
+    for movie in ratings:
+        if movie[3] >= threshold:
+            count += 1
+    return count
 
 
 # ============================================================
