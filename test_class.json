@@ -1,0 +1,33 @@
+{
+  "class_name": "Python 101",
+  "semester": "Spring 2026",
+  "students": [
+    {
+      "id": "S001",
+      "name": "Alice Kim",
+      "grades": {
+        "math": 92,
+        "english": 85,
+        "science": 78
+      }
+    },
+    {
+      "id": "S002",
+      "name": "Bob Park",
+      "grades": {
+        "math": 67,
+        "english": 72,
+        "science": 80
+      }
+    },
+    {
+      "id": "S003",
+      "name": "Carol Lee",
+      "grades": {
+        "math": 88,
+        "english": 95,
+        "science": 91
+      }
+    }
+  ]
+}
